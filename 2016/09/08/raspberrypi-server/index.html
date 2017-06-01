@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="这篇文章是对于本次折腾树莓派服务器的一个简单总结实现目标搭建树莓派服务器主要为实现下面几个目的：  作为OpenResty服务器使用 可以实现文件自动同步（Windows，linux，移动设备等）  第一步：安装树莓派系统第二部：安装OpenResty第三步：设置OpenResty的工作目录及配置文件第四步：自启动设置第五步：安装Syncthing文件同步服务Syncthing 功能上还是存在一些">
+<meta name="keywords" content="树莓派,OpenResty,Syncthing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建raspberrypi服务器的总结">
+<meta property="og:url" content="http://griffenliu.github.io/2016/09/08/raspberrypi-server/index.html">
+<meta property="og:site_name" content="Change Yourself!">
+<meta property="og:description" content="这篇文章是对于本次折腾树莓派服务器的一个简单总结实现目标搭建树莓派服务器主要为实现下面几个目的：  作为OpenResty服务器使用 可以实现文件自动同步（Windows，linux，移动设备等）  第一步：安装树莓派系统第二部：安装OpenResty第三步：设置OpenResty的工作目录及配置文件第四步：自启动设置第五步：安装Syncthing文件同步服务Syncthing 功能上还是存在一些">
+<meta property="og:image" content="http://griffenliu.github.io/2016/09/08/raspberrypi-server/imgs/virtual_server.png">
+<meta property="og:updated_time" content="2016-09-09T03:59:29.282Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搭建raspberrypi服务器的总结">
+<meta name="twitter:description" content="这篇文章是对于本次折腾树莓派服务器的一个简单总结实现目标搭建树莓派服务器主要为实现下面几个目的：  作为OpenResty服务器使用 可以实现文件自动同步（Windows，linux，移动设备等）  第一步：安装树莓派系统第二部：安装OpenResty第三步：设置OpenResty的工作目录及配置文件第四步：自启动设置第五步：安装Syncthing文件同步服务Syncthing 功能上还是存在一些">
+<meta name="twitter:image" content="http://griffenliu.github.io/2016/09/08/raspberrypi-server/imgs/virtual_server.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>搭建raspberrypi服务器的总结</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+</head>
+
+<body>
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/favorites/">Favorites</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/09/08/spring-elasticsearch/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover='$("#i-prev").toggle();' onmouseout='$("#i-prev").toggle();'></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/09/08/emacs-dev/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://griffenliu.github.io/2016/09/08/raspberrypi-server/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&text=搭建raspberrypi服务器的总结"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&title=搭建raspberrypi服务器的总结"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&is_video=false&description=搭建raspberrypi服务器的总结"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=搭建raspberrypi服务器的总结&body=Check out this article: http://griffenliu.github.io/2016/09/08/raspberrypi-server/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&title=搭建raspberrypi服务器的总结"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&title=搭建raspberrypi服务器的总结"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&title=搭建raspberrypi服务器的总结"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&title=搭建raspberrypi服务器的总结"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&name=搭建raspberrypi服务器的总结&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#这篇文章是对于本次折腾树莓派服务器的一个简单总结"><span class="toc-number">1.</span> <span class="toc-text">这篇文章是对于本次折腾树莓派服务器的一个简单总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现目标"><span class="toc-number">1.1.</span> <span class="toc-text">实现目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第一步：安装树莓派系统"><span class="toc-number">1.2.</span> <span class="toc-text">第一步：安装树莓派系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二部：安装OpenResty"><span class="toc-number">1.3.</span> <span class="toc-text">第二部：安装OpenResty</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三步：设置OpenResty的工作目录及配置文件"><span class="toc-number">1.4.</span> <span class="toc-text">第三步：设置OpenResty的工作目录及配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四步：自启动设置"><span class="toc-number">1.5.</span> <span class="toc-text">第四步：自启动设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第五步：安装Syncthing文件同步服务"><span class="toc-number">1.6.</span> <span class="toc-text">第五步：安装Syncthing文件同步服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Syncthing-功能上还是存在一些问题，比如内网和公网同步时就不是非常好用，这个还要再研究"><span class="toc-number">1.6.1.</span> <span class="toc-text">Syncthing 功能上还是存在一些问题，比如内网和公网同步时就不是非常好用，这个还要再研究</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第六步：安全等其他"><span class="toc-number">1.7.</span> <span class="toc-text">第六步：安全等其他</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#配置树莓派可以在公网访问"><span class="toc-number">1.7.1.</span> <span class="toc-text">配置树莓派可以在公网访问</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index width mx-auto px2 my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        搭建raspberrypi服务器的总结
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Change Yourself!</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2016-09-08T00:32:28.000Z" itemprop="datePublished">2016-09-08</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/OpenResty/">OpenResty</a>, <a class="tag-link" href="/tags/Syncthing/">Syncthing</a>, <a class="tag-link" href="/tags/树莓派/">树莓派</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="这篇文章是对于本次折腾树莓派服务器的一个简单总结"><a href="#这篇文章是对于本次折腾树莓派服务器的一个简单总结" class="headerlink" title="这篇文章是对于本次折腾树莓派服务器的一个简单总结"></a>这篇文章是对于本次折腾树莓派服务器的一个简单总结</h2><h3 id="实现目标"><a href="#实现目标" class="headerlink" title="实现目标"></a>实现目标</h3><p>搭建树莓派服务器主要为实现下面几个目的：</p>
+<ol>
+<li>作为OpenResty服务器使用</li>
+<li>可以实现文件自动同步（Windows，linux，移动设备等）</li>
+</ol>
+<h3 id="第一步：安装树莓派系统"><a href="#第一步：安装树莓派系统" class="headerlink" title="第一步：安装树莓派系统"></a>第一步：安装树莓派系统</h3><h3 id="第二部：安装OpenResty"><a href="#第二部：安装OpenResty" class="headerlink" title="第二部：安装OpenResty"></a>第二部：安装OpenResty</h3><h3 id="第三步：设置OpenResty的工作目录及配置文件"><a href="#第三步：设置OpenResty的工作目录及配置文件" class="headerlink" title="第三步：设置OpenResty的工作目录及配置文件"></a>第三步：设置OpenResty的工作目录及配置文件</h3><h3 id="第四步：自启动设置"><a href="#第四步：自启动设置" class="headerlink" title="第四步：自启动设置"></a>第四步：自启动设置</h3><h3 id="第五步：安装Syncthing文件同步服务"><a href="#第五步：安装Syncthing文件同步服务" class="headerlink" title="第五步：安装Syncthing文件同步服务"></a>第五步：安装Syncthing文件同步服务</h3><h4 id="Syncthing-功能上还是存在一些问题，比如内网和公网同步时就不是非常好用，这个还要再研究"><a href="#Syncthing-功能上还是存在一些问题，比如内网和公网同步时就不是非常好用，这个还要再研究" class="headerlink" title="Syncthing 功能上还是存在一些问题，比如内网和公网同步时就不是非常好用，这个还要再研究"></a>Syncthing 功能上还是存在一些问题，比如内网和公网同步时就不是非常好用，这个还要再研究</h4><h3 id="第六步：安全等其他"><a href="#第六步：安全等其他" class="headerlink" title="第六步：安全等其他"></a>第六步：安全等其他</h3><h4 id="配置树莓派可以在公网访问"><a href="#配置树莓派可以在公网访问" class="headerlink" title="配置树莓派可以在公网访问"></a>配置树莓派可以在公网访问</h4><ol>
+<li>在路由器中配置端口映射<br><img src="imgs/virtual_server.png" alt=""></li>
+<li><p>使用域名或公网IP访问SSH服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 因为22端口已被占用，这里设置为23</div><div class="line">$ ssh pi@youdomain -p23</div></pre></td></tr></table></figure>
+</li>
+<li><p>同样的把Syncthing的服务端口映射出去，因为8384未被占用，直接映射为8384</p>
+</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/favorites/">Favorites</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#这篇文章是对于本次折腾树莓派服务器的一个简单总结"><span class="toc-number">1.</span> <span class="toc-text">这篇文章是对于本次折腾树莓派服务器的一个简单总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现目标"><span class="toc-number">1.1.</span> <span class="toc-text">实现目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第一步：安装树莓派系统"><span class="toc-number">1.2.</span> <span class="toc-text">第一步：安装树莓派系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二部：安装OpenResty"><span class="toc-number">1.3.</span> <span class="toc-text">第二部：安装OpenResty</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三步：设置OpenResty的工作目录及配置文件"><span class="toc-number">1.4.</span> <span class="toc-text">第三步：设置OpenResty的工作目录及配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四步：自启动设置"><span class="toc-number">1.5.</span> <span class="toc-text">第四步：自启动设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第五步：安装Syncthing文件同步服务"><span class="toc-number">1.6.</span> <span class="toc-text">第五步：安装Syncthing文件同步服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Syncthing-功能上还是存在一些问题，比如内网和公网同步时就不是非常好用，这个还要再研究"><span class="toc-number">1.6.1.</span> <span class="toc-text">Syncthing 功能上还是存在一些问题，比如内网和公网同步时就不是非常好用，这个还要再研究</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第六步：安全等其他"><span class="toc-number">1.7.</span> <span class="toc-text">第六步：安全等其他</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#配置树莓派可以在公网访问"><span class="toc-number">1.7.1.</span> <span class="toc-text">配置树莓派可以在公网访问</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://griffenliu.github.io/2016/09/08/raspberrypi-server/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&text=搭建raspberrypi服务器的总结"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&title=搭建raspberrypi服务器的总结"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&is_video=false&description=搭建raspberrypi服务器的总结"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=搭建raspberrypi服务器的总结&body=Check out this article: http://griffenliu.github.io/2016/09/08/raspberrypi-server/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&title=搭建raspberrypi服务器的总结"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&title=搭建raspberrypi服务器的总结"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&title=搭建raspberrypi服务器的总结"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&title=搭建raspberrypi服务器的总结"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://griffenliu.github.io/2016/09/08/raspberrypi-server/&name=搭建raspberrypi服务器的总结&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick='$("#toc-footer").toggle();return false;'><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick='$("#share-footer").toggle();return false;'><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick='$("#nav-footer").toggle();return false;'><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2017 griffenliu
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/favorites/">Favorites</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- Google Analytics -->
+
+<!-- Disqus Comments -->
+
+

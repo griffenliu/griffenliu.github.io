@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="安装工具 SD格式化工具  格式化U盘 安装Raspbian 下载Raspbian 解压获得img文件 下载SD卡image工具感觉还是这个更好用：win32diskimager 运行Etcher并选择解压的img文件，Etcher貌似内存占用超高，我尝试了两次最后都因为内存不够软件报错而失败，观察了内存占用，从4G多飙升到6G多，然后砰的一下就没有然后了，无奈之下还是使用win32diskima">
+<meta name="keywords" content="raspberrypi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树莓派安装系统">
+<meta property="og:url" content="http://griffenliu.github.io/2016/09/07/raspberrypi-setup/index.html">
+<meta property="og:site_name" content="Change Yourself!">
+<meta property="og:description" content="安装工具 SD格式化工具  格式化U盘 安装Raspbian 下载Raspbian 解压获得img文件 下载SD卡image工具感觉还是这个更好用：win32diskimager 运行Etcher并选择解压的img文件，Etcher貌似内存占用超高，我尝试了两次最后都因为内存不够软件报错而失败，观察了内存占用，从4G多飙升到6G多，然后砰的一下就没有然后了，无奈之下还是使用win32diskima">
+<meta property="og:image" content="https://www.raspberrypi.org/learning/software-guide/images/SD-Formatter.jpg">
+<meta property="og:updated_time" content="2016-09-09T04:10:56.481Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="树莓派安装系统">
+<meta name="twitter:description" content="安装工具 SD格式化工具  格式化U盘 安装Raspbian 下载Raspbian 解压获得img文件 下载SD卡image工具感觉还是这个更好用：win32diskimager 运行Etcher并选择解压的img文件，Etcher貌似内存占用超高，我尝试了两次最后都因为内存不够软件报错而失败，观察了内存占用，从4G多飙升到6G多，然后砰的一下就没有然后了，无奈之下还是使用win32diskima">
+<meta name="twitter:image" content="https://www.raspberrypi.org/learning/software-guide/images/SD-Formatter.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>树莓派安装系统</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+</head>
+
+<body>
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/favorites/">Favorites</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/09/08/openresty-setup/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover='$("#i-prev").toggle();' onmouseout='$("#i-prev").toggle();'></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/09/07/lua-oo/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&text=树莓派安装系统"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&title=树莓派安装系统"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&is_video=false&description=树莓派安装系统"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=树莓派安装系统&body=Check out this article: http://griffenliu.github.io/2016/09/07/raspberrypi-setup/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&title=树莓派安装系统"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&title=树莓派安装系统"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&title=树莓派安装系统"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&title=树莓派安装系统"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&name=树莓派安装系统&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装工具"><span class="toc-number">1.</span> <span class="toc-text">安装工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式化U盘"><span class="toc-number">2.</span> <span class="toc-text">格式化U盘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Raspbian"><span class="toc-number">3.</span> <span class="toc-text">安装Raspbian</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#首次启动"><span class="toc-number">4.</span> <span class="toc-text">首次启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于Arch的安装"><span class="toc-number">5.</span> <span class="toc-text">关于Arch的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#到此基本上完成了树莓派上的Raspbian系统安装，可以开始愉快的玩耍了，我主要用来搭建OpenResty服务器，后面要搭建服务并解决文件同步的问题"><span class="toc-number">6.</span> <span class="toc-text">到此基本上完成了树莓派上的Raspbian系统安装，可以开始愉快的玩耍了，我主要用来搭建OpenResty服务器，后面要搭建服务并解决文件同步的问题~</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index width mx-auto px2 my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        树莓派安装系统
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Change Yourself!</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2016-09-07T12:36:36.000Z" itemprop="datePublished">2016-09-07</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/raspberrypi/">raspberrypi</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="安装工具"><a href="#安装工具" class="headerlink" title="安装工具"></a>安装工具</h2><ul>
+<li><a href="https://www.sdcard.org/downloads/formatter_4/index.html" target="_blank" rel="external">SD格式化工具</a></li>
+</ul>
+<h2 id="格式化U盘"><a href="#格式化U盘" class="headerlink" title="格式化U盘"></a>格式化U盘</h2><p><img src="https://www.raspberrypi.org/learning/software-guide/images/SD-Formatter.jpg" alt=""></p>
+<h2 id="安装Raspbian"><a href="#安装Raspbian" class="headerlink" title="安装Raspbian"></a>安装Raspbian</h2><ol>
+<li>下载<a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="external">Raspbian</a></li>
+<li>解压获得img文件</li>
+<li>下载<a href="http://www.etcher.io/" target="_blank" rel="external">SD卡image工具</a><br>感觉还是这个更好用：<a href="http://sourceforge.net/projects/win32diskimager/" target="_blank" rel="external">win32diskimager</a></li>
+<li><del>运行Etcher并选择解压的img文件</del>，Etcher貌似内存占用超高，我尝试了两次最后都因为内存不够软件报错而失败，观察了内存占用，从4G多飙升到6G多，<br>然后砰的一下就没有然后了，无奈之下还是使用win32diskimager了，稳定简单好用…</li>
+</ol>
+<h2 id="首次启动"><a href="#首次启动" class="headerlink" title="首次启动"></a>首次启动</h2><ul>
+<li>默认用户名密码: pi / raspberry</li>
+<li><p>开启root用户（Raspbian默认锁定root用户）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># pi登录后执行下面命令</div><div class="line">$ sudo passwd root</div><div class="line"># 提示输入密码，输入两次密码后，执行下面的命令完成root用户解锁</div><div class="line">$ sudo passwd --unlock root</div></pre></td></tr></table></figure>
+<p>参考文章：<a href="http://outofmemory.cn/code-snippet/2897/shumeipai" target="_blank" rel="external">树莓派启用root账户</a></p>
+</li>
+<li><p>修改软件更新源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># 编辑sources.list文件，注释掉原有内容，替换为国内源（例子中为中科大镜像地址），保存文件，更新apt</div><div class="line">$ sudo vi /etc/apt/sources.list</div><div class="line">deb http://mirrors.ustc.edu.cn/raspbian/raspbian/ jessie main non-free contrib rpi</div><div class="line">deb-src http://mirrors.ustc.edu.cn/raspbian/raspbian/ jessie main non-free contrib rpi</div><div class="line">#deb http://mirrors.aliyun.com/raspbian/raspbian/ jessie main contrib non-free rpi</div><div class="line">#deb-src http://mirrors.aliyun.com/raspbian/raspbian/ jessie main contrib non-free rpi</div><div class="line"># deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi</div><div class="line"># Uncomment line below then &apos;apt-get update&apos; to enable &apos;apt-get source&apos;</div><div class="line">#deb-src http://archive.raspbian.org/raspbian/ jessie main contrib non-free rpi</div><div class="line">$ sudo apt-get update</div><div class="line"></div><div class="line"># 据说仍然还是会使用国外源的的情况，有同学说需要将/etc/apt/sources.list.d中的也注释掉，不过貌似我没碰到这种情况，记录下来备用吧</div></pre></td></tr></table></figure>
+<p>参考文章：<a href="http://www.oschina.net/news/70594/raspbian-2016-2-3" target="_blank" rel="external">Raspbian 2016-02-03 发布中的评论…</a> <a href="http://fjzeng.com/228" target="_blank" rel="external">Raspbian国内镜像地址及更新镜像操作</a></p>
+</li>
+</ul>
+<h2 id="关于Arch的安装"><a href="#关于Arch的安装" class="headerlink" title="关于Arch的安装"></a>关于Arch的安装</h2><ul>
+<li>在官网上搜了一下，有这样一篇文章<a href="https://www.raspberrypi.org/blog/arch-linux-arm-available-for-download/" target="_blank" rel="external">ARCH LINUX ARM AVAILABLE FOR DOWNLOAD</a>，但是进入下载页确已经找不到arch的下载链接了</li>
+<li><a href="https://archlinuxarm.org/" target="_blank" rel="external">ArchlinuxARM</a></li>
+<li>Arch上的OpenResty<a href="https://aur.archlinux.org/packages/openresty/" target="_blank" rel="external">openresty 1.11.2.1-1</a><br>最终决定先不折腾Arch了</li>
+</ul>
+<h2 id="到此基本上完成了树莓派上的Raspbian系统安装，可以开始愉快的玩耍了，我主要用来搭建OpenResty服务器，后面要搭建服务并解决文件同步的问题"><a href="#到此基本上完成了树莓派上的Raspbian系统安装，可以开始愉快的玩耍了，我主要用来搭建OpenResty服务器，后面要搭建服务并解决文件同步的问题" class="headerlink" title="到此基本上完成了树莓派上的Raspbian系统安装，可以开始愉快的玩耍了，我主要用来搭建OpenResty服务器，后面要搭建服务并解决文件同步的问题~"></a>到此基本上完成了树莓派上的Raspbian系统安装，可以开始愉快的玩耍了，我主要用来搭建OpenResty服务器，后面要搭建服务并解决文件同步的问题~</h2>
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/favorites/">Favorites</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装工具"><span class="toc-number">1.</span> <span class="toc-text">安装工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式化U盘"><span class="toc-number">2.</span> <span class="toc-text">格式化U盘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Raspbian"><span class="toc-number">3.</span> <span class="toc-text">安装Raspbian</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#首次启动"><span class="toc-number">4.</span> <span class="toc-text">首次启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于Arch的安装"><span class="toc-number">5.</span> <span class="toc-text">关于Arch的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#到此基本上完成了树莓派上的Raspbian系统安装，可以开始愉快的玩耍了，我主要用来搭建OpenResty服务器，后面要搭建服务并解决文件同步的问题"><span class="toc-number">6.</span> <span class="toc-text">到此基本上完成了树莓派上的Raspbian系统安装，可以开始愉快的玩耍了，我主要用来搭建OpenResty服务器，后面要搭建服务并解决文件同步的问题~</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&text=树莓派安装系统"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&title=树莓派安装系统"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&is_video=false&description=树莓派安装系统"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=树莓派安装系统&body=Check out this article: http://griffenliu.github.io/2016/09/07/raspberrypi-setup/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&title=树莓派安装系统"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&title=树莓派安装系统"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&title=树莓派安装系统"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&title=树莓派安装系统"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://griffenliu.github.io/2016/09/07/raspberrypi-setup/&name=树莓派安装系统&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick='$("#toc-footer").toggle();return false;'><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick='$("#share-footer").toggle();return false;'><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick='$("#nav-footer").toggle();return false;'><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2017 griffenliu
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/favorites/">Favorites</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- Google Analytics -->
+
+<!-- Disqus Comments -->
+
+
